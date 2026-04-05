@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./data:/app/data       # persist SQLite DB and long-term memory
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  ui:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: >
+      sh -c "pip install streamlit requests pandas -q &&
+             streamlit run frontend/streamlit_app.py
+             --server.headless true
+             --browser.gatherUsageStats false
+             --server.port 8501"
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    restart: unless-stopped
