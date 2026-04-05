@@ -5,7 +5,8 @@ import pandas as pd
 import requests
 import streamlit as st
 
-API = "http://localhost:8003"
+import os
+API = os.environ.get("API_URL", "http://localhost:8003")
 
 st.set_page_config(page_title="Personal Finance Agent", layout="wide", initial_sidebar_state="collapsed")
 
